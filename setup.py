@@ -8,7 +8,8 @@ requires_path = os.path.join(here, 'requirements.txt')
 requires = []
 
 with open(requires_path) as f:
-    requires.append(f.read())
+    for line in f.readlines():
+        requires.append(line.strip())
 
 # Setup
 setup(name="app",

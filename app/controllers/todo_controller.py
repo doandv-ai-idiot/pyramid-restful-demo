@@ -19,9 +19,12 @@ class TodoController:
     @view_config(route_name="todos", request_method='POST')
     def todos_add(self):
         title = self.request.json_body['title']
-        Session.add(ToDo(title=title))
-        todo = Session.query(ToDo).filter_by(title=title).one()
-        return todo
+        exists_todo = Session.query(ToDo).filter(ToDo.title == title).count()
+        if exists_todo == 0:
+            Session.add(ToDo(title=title))
+            todo = Session.query(ToDo).filter_by(title=title).one()
+            return todo
+        return {"msg": 'Todo with title: {} existed!!'.format(title)}
 
     @view_config(route_name='todo')
     def todo_view(self):
